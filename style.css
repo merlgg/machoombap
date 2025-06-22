@@ -1,0 +1,9 @@
+@import url('../../../packages/pretendard/dist/web/variable/woff2/PretendardVariable.woff2');
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  display: block;
+}
