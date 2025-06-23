@@ -285,8 +285,6 @@ function draw() {
     
     stroke(174, 223, 168);
     rect(15, 674, 361, 50, 10);
-    
-    image(img_back, 29, 53, 7,15);
   }
   else if(state == 4){ //나의 리스트
     for(let i = 0 ; i < 7 ; i += 1) {
@@ -554,6 +552,36 @@ function cntLines(textArray) { //텍스트 글자줄세기
   }
   return lineCnt - 1;
 }
+
+// function wrapText(txt, maxWidth) {
+//   let enters = txt.split("\n");
+//   let words = txt.split(' ');
+//   let lines = [];
+//   let currentLine = '';
+
+//   for (let word of words) {
+//     let testLine = currentLine + word + ' ';
+//     if (textWidth(testLine) > maxWidth && currentLine !== '') {
+//       lines.push(currentLine.trim());
+//       currentLine = word + ' ';
+//     } else {
+//       currentLine = testLine;
+//     }
+//   }
+
+//   lines.push(currentLine.trim());
+  
+//   let lineNumbers = lines.length + (enters.length - 1);
+//   return lineNumbers;
+// }
+
+// function calculateTextHeight(lines){
+//   let oneLineHeight = textAscent() + textDescent();
+//   let totalLineHeight = oneLineHeight * lines;
+  
+//   return totalLineHeight;
+  
+// }
 
 function generateText(fillColor, sizeOfText, isBold, toWrite, textX, textY){
   noStroke();
