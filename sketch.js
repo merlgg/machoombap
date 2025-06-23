@@ -321,12 +321,12 @@ function draw() {
     rect(0, 0, width, 190);
 
     generateText([102, 102, 102], 15, 0, "냉장고 보기", 17, 122);
-    generateText([7, 121, 65], 15, 1, "파먹기", 106, 122);
-    generateText([102, 102, 102], 15, 0, "채우기", 165, 122);
+    generateText([102, 102, 102], 15, 0, "파먹기", 106, 122);
+    generateText([7, 121, 65], 15, 1, "채우기", 165, 122);
     
     fill(8, 121, 64);
     noStroke();
-    rect(107, 128, 41, 3);
+    rect(165, 128, 41, 3);
     
     generateText([0, 0, 0], 20, 1, "나의 리스트", 15, 159);
     generateText([146, 146, 146], 15, 1, "이번 주 수정님이 장 볼 리스트에요!", 15, 182);
@@ -414,15 +414,15 @@ function draw() {
       
       if (chatBotConversation[i][0]){ // 사람(1) 대화기록
         //textLines = cntLines(chatBotConversation[i][1]);
-        textLines = wrapText(chatBotConversation[i][1], 250);
+        textLines = cntLines(chatBotConversation[i][1]);
         
         noStroke();
         fill(172, 223, 167);
-        rect(width - (textLines <= 1 ? textWidth(chatBotConversation[i][1]) : 250) - 48 - 13.5, 140 + 61 * i + scrollY + sumOfTextLines * 14.4 - 10, (textLines <= 1 ? textWidth(chatBotConversation[i][1]) : 250) + 27, textLines * 14.4 + 35, 30, 10, 0, 30);
+        rect(width - (textLines < 2 ? textWidth(chatBotConversation[i][1]) : 250) - 48 - 13.5, 140 + 61 * i + scrollY + sumOfTextLines * 14.4 - 10, (textLines < 2 ? textWidth(chatBotConversation[i][1]) : 250) + 27, textLines * 14.4 + 35, 30, 10, 0, 30);
         
         fill(0, 0, 0);
         
-        text(chatBotConversation[i][1], width - (textLines <= 1 ? textWidth(chatBotConversation[i][1]) : 250) - 48, 140 + 61 * i + scrollY + sumOfTextLines * 14.4, 250);
+        text(chatBotConversation[i][1], width - (textLines < 2 ? textWidth(chatBotConversation[i][1]) : 250) - 48, 140 + 61 * i + scrollY + sumOfTextLines * 14.4, 250);
         
         if (textLines > 1) {
           sumOfTextLines += textLines;
@@ -434,7 +434,7 @@ function draw() {
         
         noStroke();
         fill(8, 120, 64);
-        rect(48 - 13.5, 140 + 61 * i + scrollY + sumOfTextLines * 14.4 - 10, (textLines <= 1 ? textWidth(chatBotConversation[i][1]) : 250) + 27, textLines * 14.4 + 35, 10, 30, 30, 0);
+        rect(48 - 13.5, 140 + 61 * i + scrollY + sumOfTextLines * 14.4 - 10, (textLines < 2 ? textWidth(chatBotConversation[i][1]) : 250) + 27, textLines * 14.4 + 35, 10, 30, 30, 0);
         
         fill(255, 255, 255);
         text(chatBotConversation[i][1], 48, 140 + 61 * i + scrollY + sumOfTextLines * 14.4, 250);
@@ -523,63 +523,67 @@ function draw() {
 //   return lineCnt;
 // }
 
-// function cntLines(textArray) { //텍스트 글자줄세기 
-//   let textlen = 0;
-//   let lineCnt = 0;
-//   let splitArray = textArray.split("\n");
-//   //console.log(splitArray);
+function cntLines(textArray) { //텍스트 글자줄세기 
+  let textlen = 0;
+  let latestSpace = 0;
+  let lineCnt = 0;
+  let splitArray = textArray.split("\n");
+  console.log(splitArray);
   
-//   for(let i = 0 ; i < splitArray.length ; i += 1) {
-//     textlen = 0;
-//     lineCnt += 1;
-//     //console.log(splitArray[i]);
-//     let tempArray = splitArray[i];
-//     for (let j = 0 ; j < tempArray.length ; j += 1) {
-//       //console.log(j, lineCnt, tempArray[j], textlen);
+  for(let i = 0 ; i < splitArray.length ; i += 1) {
+    textlen = 0;
+    latestSpace = 0;
+    lineCnt += 1;
+    //console.log(splitArray[i]);
+    let tempArray = splitArray[i];
+    for (let j = 0 ; j < tempArray.length ; j += 1) {
+      //console.log(j, lineCnt, tempArray[j], textlen, latestSpace);
+      textlen += textWidth(tempArray[j]);
 
-//       textlen += textWidth(tempArray[j]);
+      if(tempArray[j] == ' '){
+        latestSpace = j;
+      }
 
-//       if (textlen >= 250) {
-//         //console.log(tempArray[j]);
-//         lineCnt += 1;
-//         textlen = 0;
-//         j -= 1;
-//       }
-//     }
-//   }
-//   console.log(lineCnt);
-//   return lineCnt - 1;
-// }
-
-function wrapText(txt, maxWidth) {
-  let enters = txt.split("\n");
-  let words = txt.split(' ');
-  let lines = [];
-  let currentLine = '';
-
-  for (let word of words) {
-    let testLine = currentLine + word + ' ';
-    if (textWidth(testLine) > maxWidth && currentLine !== '') {
-      lines.push(currentLine.trim());
-      currentLine = word + ' ';
-    } else {
-      currentLine = testLine;
+      if (textlen >= 250) {
+        lineCnt += 1;
+        textlen = 0;
+        j = latestSpace;
+        //console.log(tempArray[j]);
+      }
     }
   }
-
-  lines.push(currentLine.trim());
-  
-  let lineNumbers = lines.length + (enters.length - 1);
-  return lineNumbers;
+  return lineCnt - 1;
 }
 
-function calculateTextHeight(lines){
-  let oneLineHeight = textAscent() + textDescent();
-  let totalLineHeight = oneLineHeight * lines;
+// function wrapText(txt, maxWidth) {
+//   let enters = txt.split("\n");
+//   let words = txt.split(' ');
+//   let lines = [];
+//   let currentLine = '';
+
+//   for (let word of words) {
+//     let testLine = currentLine + word + ' ';
+//     if (textWidth(testLine) > maxWidth && currentLine !== '') {
+//       lines.push(currentLine.trim());
+//       currentLine = word + ' ';
+//     } else {
+//       currentLine = testLine;
+//     }
+//   }
+
+//   lines.push(currentLine.trim());
   
-  return totalLineHeight;
+//   let lineNumbers = lines.length + (enters.length - 1);
+//   return lineNumbers;
+// }
+
+// function calculateTextHeight(lines){
+//   let oneLineHeight = textAscent() + textDescent();
+//   let totalLineHeight = oneLineHeight * lines;
   
-}
+//   return totalLineHeight;
+  
+// }
 
 function generateText(fillColor, sizeOfText, isBold, toWrite, textX, textY){
   noStroke();
@@ -644,7 +648,7 @@ function mouseClicked() {
       }
     }
   }
-  else if (state == 4){
+  else if (state == 4 && mouseY > 190 && mouseY < 734){
     if(mouseX >= 29 && mouseX <= 29 + 335) {
       if((mouseY - 180) % 90 <= 80){
         let scrolledY = mouseY - 180 - scrollY;
@@ -679,10 +683,10 @@ function mouseClicked() {
         else if(mouseX >= 100 && mouseX <= 145) state = 3;
         else if(mouseX >= 158 && mouseX <= 158 + 45) state = 2;
       }
-    }
-    else if (state == 2){ //냉장고 채우기 화면
-      if(mouseX >= 325 && mouseX <= 325 + 53){
-        if(mouseY >= 207 && mouseY <= 207 + 53) state = 4;
+      else if (state == 2){ //냉장고 채우기 화면
+        if(mouseX >= 325 && mouseX <= 325 + 53){
+          if(mouseY >= 207 && mouseY <= 207 + 53) state = 4;
+        }
       }
     }
   }
