@@ -555,36 +555,6 @@ function cntLines(textArray) { //텍스트 글자줄세기
   return lineCnt - 1;
 }
 
-// function wrapText(txt, maxWidth) {
-//   let enters = txt.split("\n");
-//   let words = txt.split(' ');
-//   let lines = [];
-//   let currentLine = '';
-
-//   for (let word of words) {
-//     let testLine = currentLine + word + ' ';
-//     if (textWidth(testLine) > maxWidth && currentLine !== '') {
-//       lines.push(currentLine.trim());
-//       currentLine = word + ' ';
-//     } else {
-//       currentLine = testLine;
-//     }
-//   }
-
-//   lines.push(currentLine.trim());
-  
-//   let lineNumbers = lines.length + (enters.length - 1);
-//   return lineNumbers;
-// }
-
-// function calculateTextHeight(lines){
-//   let oneLineHeight = textAscent() + textDescent();
-//   let totalLineHeight = oneLineHeight * lines;
-  
-//   return totalLineHeight;
-  
-// }
-
 function generateText(fillColor, sizeOfText, isBold, toWrite, textX, textY){
   noStroke();
   if (fillColor[0] == fillColor[1] && fillColor[0] == fillColor [2])
